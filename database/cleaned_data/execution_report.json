@@ -1,0 +1,16 @@
+{
+  "pipeline_execution": {
+    "start_time": "2026-04-18T00:06:03.147680",
+    "end_time": "2026-04-18T00:11:24.583409",
+    "duration_seconds": 321.435729,
+    "success": true
+  },
+  "data_statistics": {
+    "tables_processed": 6,
+    "total_records": 1054232,
+    "saved_files": 6
+  },
+  "errors": [],
+  "output_directory": "c:\\Users\\32546\\Desktop\\yanxiaomap\\database\\cleaned_data",
+  "log_file": "c:\\Users\\32546\\Desktop\\yanxiaomap\\database\\cleaned_data\\cleaning_pipeline.log"
+}

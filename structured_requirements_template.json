@@ -1,0 +1,115 @@
+{
+  "project_name": "项目名称",
+  "version": "1.0.0",
+  "description": "项目简要描述",
+  "functional_requirements": [
+    {
+      "id": "FR001",
+      "module": "用户认证",
+      "description": "用户可以通过邮箱和密码注册、登录",
+      "acceptance_criteria": [
+        "注册表单包含邮箱、密码、确认密码字段",
+        "密码需满足复杂度要求",
+        "登录后跳转到仪表盘页面"
+      ],
+      "frontend_components": ["LoginForm", "RegisterForm", "AuthContext"],
+      "backend_services": ["/api/auth/register", "/api/auth/login", "/api/auth/logout"],
+      "database_tables": ["users"],
+      "dependencies": []
+    },
+    {
+      "id": "FR002",
+      "module": "数据管理",
+      "description": "用户可以对业务数据进行增删改查操作",
+      "acceptance_criteria": [
+        "数据列表支持分页和搜索",
+        "支持批量删除操作",
+        "表单验证确保数据完整性"
+      ],
+      "frontend_components": ["DataTable", "DataForm", "SearchBar"],
+      "backend_services": ["/api/data/list", "/api/data/create", "/api/data/update", "/api/data/delete"],
+      "database_tables": ["items"],
+      "dependencies": ["FR001"]
+    }
+  ],
+  "non_functional_requirements": {
+    "performance": {
+      "response_time": "API响应时间 < 500ms",
+      "concurrent_users": "支持1000并发用户"
+    },
+    "security": {
+      "authentication": "JWT token认证",
+      "data_encryption": "敏感数据加密存储"
+    },
+    "usability": {
+      "responsive_design": "支持移动端和桌面端",
+      "accessibility": "符合WCAG 2.1 AA标准"
+    }
+  },
+  "technical_stack": {
+    "frontend": "React 18 + TypeScript + Tailwind CSS",
+    "backend": "Node.js + Express + TypeScript",
+    "database": "PostgreSQL 15",
+    "deployment": "Docker + AWS ECS"
+  },
+  "interfaces": [
+    {
+      "name": "用户认证API",
+      "type": "REST",
+      "endpoints": [
+        {
+          "method": "POST",
+          "path": "/api/auth/register",
+          "description": "用户注册",
+          "request": {
+            "email": "string",
+            "password": "string"
+          },
+          "response": {
+            "success": "boolean",
+            "message": "string",
+            "user_id": "number"
+          },
+          "error_codes": [
+            {"code": 400, "message": "邮箱已存在"},
+            {"code": 422, "message": "密码复杂度不足"}
+          ]
+        },
+        {
+          "method": "POST",
+          "path": "/api/auth/login",
+          "description": "用户登录",
+          "request": {
+            "email": "string",
+            "password": "string"
+          },
+          "response": {
+            "success": "boolean",
+            "message": "string",
+            "token": "string",
+            "user": {
+              "id": "number",
+              "email": "string"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "data_models": [
+    {
+      "table_name": "users",
+      "description": "用户表",
+      "fields": [
+        {"name": "id", "type": "serial", "primary_key": true, "nullable": false},
+        {"name": "email", "type": "varchar(255)", "unique": true, "nullable": false},
+        {"name": "password_hash", "type": "varchar(255)", "nullable": false},
+        {"name": "created_at", "type": "timestamp", "default": "CURRENT_TIMESTAMP"},
+        {"name": "updated_at", "type": "timestamp", "default": "CURRENT_TIMESTAMP"}
+      ],
+      "indexes": [
+        {"name": "idx_users_email", "columns": ["email"]}
+      ]
+    }
+  ]
+}

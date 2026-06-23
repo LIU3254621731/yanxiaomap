@@ -1,0 +1,339 @@
+# 安全策略配置文件
+# 遵循OWASP Top 10 2021、等保2.0基础要求、GDPR基本原则
+
+# 密码安全策略
+password:
+  # 密码加密算法：必须使用BCrypt
+  algorithm: bcrypt
+  # BCrypt盐轮次：必须≥10
+  bcrypt-strength: 10
+  # 密码最小长度
+  min-length: 8
+  # 密码复杂度要求
+  complexity:
+    require-uppercase: true
+    require-lowercase: true
+    require-digit: true
+    require-special-char: false  # 生产环境建议开启
+  # 密码历史检查（防止重复使用）
+  history-check: 5
+  # 密码过期时间（天），0表示永不过期
+  expire-days: 90
+
+# 会话安全策略
+session:
+  # JWT配置
+  jwt:
+    # Token有效期（秒）：2小时
+    access-token-expiration: 7200
+    # 刷新Token有效期（秒）：7天
+    refresh-token-expiration: 604800
+    # 支持刷新机制
+    enable-refresh: true
+    # Token绑定：防止盗用
+    bind-ip: true
+    bind-user-agent: true
+  # Token黑名单（支持主动注销）
+  blacklist:
+    enabled: true
+    ttl-hours: 24
+
+# 登录安全策略
+login:
+  # 图形验证码
+  captcha:
+    enabled: true
+    # 验证码类型：math(数学计算) / char(字符验证)
+    type: math
+    # 验证码过期时间（秒）
+    expire-seconds: 300
+  # 登录失败锁定
+  lock:
+    # 失败次数阈值
+    max-attempts: 3
+    # 锁定时间（秒）：1小时
+    lock-duration: 3600
+    # 锁定范围：IP / USERNAME / IP+USERNAME
+    lock-scope: IP+USERNAME
+  # 登录日志记录
+  log:
+    enabled: true
+    # 记录登录成功
+    log-success: true
+    # 记录登录失败
+    log-failure: true
+    # 记录IP地址
+    log-ip: true
+    # 记录User-Agent
+    log-user-agent: true
+
+# SQL注入防护策略
+sql-injection:
+  # 参数化查询：必须启用
+  parameterized-query: true
+  # SQL关键词过滤
+  keyword-filter:
+    enabled: true
+    # 敏感SQL关键词列表
+    keywords:
+      - "drop"
+      - "delete"
+      - "update"
+      - "insert"
+      - "select"
+      - "union"
+      - "or"
+      - "and"
+      - "exec"
+      - "execute"
+      - "xp_"
+      - "sp_"
+    # 过滤模式：block(阻止) / sanitize(清理)
+    mode: block
+  # 数据库最小权限原则
+  least-privilege: true
+
+# XSS防护策略
+xss:
+  # XSS过滤器
+  filter:
+    enabled: true
+    # 过滤危险HTML标签
+    html-tags:
+      - "script"
+      - "iframe"
+      - "frame"
+      - "object"
+      - "embed"
+      - "applet"
+    # 过滤危险属性
+    dangerous-attributes:
+      - "onclick"
+      - "onload"
+      - "onerror"
+      - "onmouseover"
+      - "javascript:"
+    # 过滤模式：escape(转义) / strip(删除)
+    mode: escape
+  # Content Security Policy头
+  csp:
+    enabled: true
+    policy: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:;"
+
+# CSRF防护策略
+csrf:
+  # CSRF token验证
+  token:
+    enabled: true
+    # Token名称
+    token-name: "X-CSRF-TOKEN"
+    # Token头名称
+    header-name: "X-CSRF-TOKEN"
+  # 保护的管理端接口路径
+  protected-paths:
+    - "/api/admin/**"
+    - "/api/data/**"
+    - "/api/system/**"
+
+# 接口限流策略
+rate-limit:
+  # 用户端接口限制
+  user:
+    # 请求限制（每分钟）
+    requests-per-minute: 10
+    # 基于IP的限制
+    ip-based: true
+    # 基于用户的限制
+    user-based: true
+  # 管理端接口限制
+  admin:
+    # 请求限制（每分钟）
+    requests-per-minute: 30
+    # 基于IP的限制
+    ip-based: true
+    # 基于用户的限制
+    user-based: true
+  # 公共接口限制
+  public:
+    # 请求限制（每分钟）
+    requests-per-minute: 60
+    # 基于IP的限制
+    ip-based: true
+  # 限流异常处理
+  exception:
+    # 返回HTTP状态码
+    http-status: 429
+    # 返回消息
+    message: "请求过于频繁，请稍后再试"
+
+# 文件上传安全策略
+file-upload:
+  # 允许的文件类型（MIME类型）
+  allowed-mime-types:
+    - "image/jpeg"
+    - "image/png"
+    - "image/gif"
+    - "application/pdf"
+    - "application/msword"
+    - "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    - "application/vnd.ms-excel"
+    - "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+  # 文件大小限制（字节）
+  max-size: 10485760  # 10MB
+  # 文件病毒扫描
+  virus-scan:
+    enabled: false  # 生产环境建议启用
+    # 扫描服务URL（如果需要）
+    service-url: ""
+  # 安全存储路径
+  storage-path: "/secure/uploads"
+
+# 敏感数据保护策略
+sensitive-data:
+  # 加密存储
+  encryption:
+    enabled: true
+    # 加密算法
+    algorithm: "AES/GCM/NoPadding"
+    # 密钥管理方式：KMS / Vault / Database
+    key-management: "database"
+  # 数据脱敏
+  masking:
+    enabled: true
+    # 需要脱敏的字段
+    fields:
+      - "password"
+      - "email"
+      - "phone"
+      - "id_card"
+  # 数据保留策略
+  retention:
+    # 个人数据保留时间（天）
+    personal-data-days: 365
+    # 日志数据保留时间（天）
+    log-data-days: 180
+    # 备份数据保留时间（天）
+    backup-data-days: 30
+
+# 安全监控策略
+security-monitoring:
+  # 异常登录监控
+  abnormal-login:
+    enabled: true
+    # 异地登录检测
+    different-location: true
+    # 异常时间登录检测（如凌晨2-5点）
+    abnormal-time: true
+    # 频繁登录尝试检测
+    frequent-attempts: true
+  # 安全事件日志
+  event-log:
+    enabled: true
+    # 记录的安全事件类型
+    event-types:
+      - "login.success"
+      - "login.failure"
+      - "user.create"
+      - "user.update"
+      - "user.delete"
+      - "data.export"
+      - "file.upload"
+    # 日志存储位置
+    storage: "database"
+  # 定期安全扫描
+  periodic-scan:
+    enabled: true
+    # 扫描频率（小时）
+    frequency-hours: 24
+    # 扫描类型：vulnerability / compliance / performance
+    scan-types:
+      - "vulnerability"
+      - "compliance"
+
+# 合规要求
+compliance:
+  # 备案信息
+  filing:
+    # ICP备案号
+    icp-number: "京ICP备XXXXXX号"
+    # 公安网安备案号
+    police-number: "京公网安备XXXXXX号"
+    # 备案信息显示位置
+    display-location: "footer"
+  # 隐私政策
+  privacy-policy:
+    # 隐私政策版本
+    version: "1.0"
+    # 生效日期
+    effective-date: "2026-04-18"
+    # 隐私政策文件路径
+    file-path: "/templates/compliance/privacy-policy.html"
+  # SSL证书配置
+  ssl:
+    # 全站HTTPS
+    force-https: true
+    # HSTS配置
+    hsts:
+      enabled: true
+      max-age: 31536000  # 1年
+      include-subdomains: true
+    # 混合内容检测
+    mixed-content-check: true
+
+# 安全头配置
+security-headers:
+  # X-Content-Type-Options
+  x-content-type-options: "nosniff"
+  # X-Frame-Options
+  x-frame-options: "DENY"
+  # X-XSS-Protection
+  x-xss-protection: "1; mode=block"
+  # Referrer-Policy
+  referrer-policy: "strict-origin-when-cross-origin"
+  # Strict-Transport-Security
+  strict-transport-security: "max-age=31536000; includeSubDomains"
+  # Content-Security-Policy
+  content-security-policy: "default-src 'self'"
+
+# 安全审计配置
+security-audit:
+  # 审计日志
+  audit-log:
+    enabled: true
+    # 审计事件类型
+    events:
+      - "authentication"
+      - "authorization"
+      - "data-access"
+      - "configuration-change"
+    # 日志保留时间（天）
+    retention-days: 365
+  # 定期审计
+  periodic-audit:
+    enabled: true
+    # 审计频率（天）
+    frequency-days: 30
+    # 审计范围
+    scope: "full"
+
+# 应急响应计划
+incident-response:
+  # 联系人信息
+  contacts:
+    - name: "安全管理员"
+      email: "security@yanxiaomap.com"
+      phone: ""
+    - name: "技术负责人"
+      email: "tech@yanxiaomap.com"
+      phone: ""
+  # 响应时间要求
+  response-times:
+    critical: "15分钟"
+    high: "1小时"
+    medium: "4小时"
+    low: "24小时"
+  # 通知机制
+  notification:
+    email: true
+    sms: false
+    webhook: true

@@ -1,0 +1,82 @@
+# 应用配置
+spring:
+  application:
+    name: yanxiaomap-backend
+
+  # 多环境配置，默认使用dev环境
+  profiles:
+    active: dev
+
+  # 文件上传配置
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 20MB
+
+# 服务端口
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+# MyBatis-Plus配置
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+  global-config:
+    db-config:
+      id-type: auto
+
+# 日志配置
+logging:
+  level:
+    com.yanxiaomap: DEBUG
+    org.springframework.security: INFO
+    org.springframework.web: INFO
+    org.mybatis: DEBUG
+  file:
+    name: logs/yanxiaomap.log
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
+# JWT配置
+jwt:
+  secret: yanxiaomap-secret-key-change-in-production
+  expiration: 7200 # 2小时，单位秒
+  issuer: yanxiaomap-backend
+
+# 接口限流配置
+rate-limit:
+  user: 10 # 用户端接口每分钟10次/IP
+  admin: 30 # 管理端接口每分钟30次/IP
+
+# 高德地图API配置
+amap:
+  key: ${AMAP_API_KEY:your-amap-api-key}
+  security-key: ${AMAP_SECURITY_KEY:}
+  base-url: https://restapi.amap.com/v3
+
+# Swagger配置
+springfox:
+  documentation:
+    enabled: true
+    swagger-ui:
+      enabled: true
+      path: /swagger-ui.html
+
+# 跨域配置
+cors:
+  allowed-origins: "*"
+  allowed-methods: GET,POST,PUT,DELETE,OPTIONS
+  allowed-headers: "*"
+  allow-credentials: true
+
+# 自定义配置
+yanxiaomap:
+  cache:
+    school-list-ttl: 300 # 院校列表缓存时间（秒）
+    school-detail-ttl: 600 # 院校详情缓存时间（秒）
+  export:
+    excel-template-path: templates/excel/
+    max-export-rows: 10000

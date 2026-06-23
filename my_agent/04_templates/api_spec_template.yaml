@@ -1,0 +1,430 @@
+# API 接口规范模板
+# 使用说明：将此模板复制到项目中，替换具体接口信息
+# 文件命名: api_spec_<module>.yaml
+
+openapi: "3.0.0"
+info:
+  title: "[项目名称] API 接口规范"
+  description: "[项目描述]"
+  version: "1.0.0"
+  contact:
+    name: "[接口负责人]"
+
+servers:
+  - url: http://localhost:[端口号]/api
+    description: 开发环境
+  - url: https://[生产域名]/api
+    description: 生产环境
+
+paths:
+  # ==========================================
+  # 模块: [模块名称]
+  # ==========================================
+
+  /[resource]:
+    get:
+      summary: "[查询/列表] 接口"
+      description: "[接口功能详细描述]"
+      operationId: "getResources"
+      tags:
+        - "[模块标签]"
+      parameters:
+        - name: keyword
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 搜索关键词
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 1
+          description: 页码
+        - name: size
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 20
+          description: 每页数量
+        - name: sort_by
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [created_at, updated_at, name]
+          description: 排序字段
+      responses:
+        "200":
+          description: 成功返回
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "操作成功"
+                  data:
+                    type: object
+                    properties:
+                      records:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/[Resource]"
+                      total:
+                        type: integer
+                        example: 100
+                      page:
+                        type: integer
+                        example: 1
+                      size:
+                        type: integer
+                        example: 20
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/ServerError"
+
+  /[resource]/{id}:
+    get:
+      summary: "[详情] 接口"
+      description: "根据 ID 获取 [资源] 详情"
+      operationId: "getResourceById"
+      tags:
+        - "[模块标签]"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 资源 ID
+      responses:
+        "200":
+          description: 成功返回
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: "#/components/schemas/[Resource]"
+
+  /[resource]:
+    post:
+      summary: "[创建] 接口"
+      description: "创建新的 [资源]"
+      operationId: "createResource"
+      tags:
+        - "[模块标签]"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Create[Resource]Request"
+      responses:
+        "200":
+          description: 创建成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: "#/components/schemas/[Resource]"
+
+  /[resource]/{id}:
+    put:
+      summary: "[更新] 接口"
+      description: "更新指定 [资源]"
+      operationId: "updateResource"
+      tags:
+        - "[模块标签]"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Update[Resource]Request"
+      responses:
+        "200":
+          description: 更新成功
+
+    delete:
+      summary: "[删除] 接口"
+      description: "删除指定 [资源]"
+      operationId: "deleteResource"
+      tags:
+        - "[模块标签]"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: 删除成功
+
+# ==========================================
+# 认证相关接口
+# ==========================================
+
+  /auth/login:
+    post:
+      summary: "用户登录"
+      description: "用户登录认证，返回 JWT Token"
+      operationId: "login"
+      tags:
+        - "认证"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+                - password
+              properties:
+                username:
+                  type: string
+                  example: "admin"
+                password:
+                  type: string
+                  format: password
+                  example: "password123"
+      responses:
+        "200":
+          description: "登录成功"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      token:
+                        type: string
+                        example: "eyJhbGciOiJIUzI1NiIs..."
+                      user_info:
+                        $ref: "#/components/schemas/UserInfo"
+
+  /auth/register:
+    post:
+      summary: "用户注册"
+      description: "新用户注册"
+      operationId: "register"
+      tags:
+        - "认证"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+                - password
+                - email
+              properties:
+                username:
+                  type: string
+                  minLength: 3
+                  maxLength: 50
+                password:
+                  type: string
+                  format: password
+                  minLength: 6
+                email:
+                  type: string
+                  format: email
+                phone:
+                  type: string
+      responses:
+        "200":
+          description: "注册成功"
+
+# ==========================================
+# 通用组件定义
+# ==========================================
+
+components:
+  schemas:
+    # 通用响应格式
+    ApiResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "操作成功"
+        code:
+          type: integer
+          example: 200
+        timestamp:
+          type: string
+          format: date-time
+          example: "2026-04-17T10:00:00Z"
+
+    # 分页响应格式
+    PageResponse:
+      type: object
+      properties:
+        records:
+          type: array
+          items:
+            type: object
+        total:
+          type: integer
+          example: 100
+        page:
+          type: integer
+          example: 1
+        size:
+          type: integer
+          example: 20
+
+    # [Resource] 数据模型
+    [Resource]:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: 主键 ID
+        name:
+          type: string
+          description: 名称
+        status:
+          type: string
+          enum: [active, inactive]
+          description: 状态
+        created_at:
+          type: string
+          format: date-time
+          description: 创建时间
+        updated_at:
+          type: string
+          format: date-time
+          description: 更新时间
+
+    # 用户信息
+    UserInfo:
+      type: object
+      properties:
+        id:
+          type: integer
+        username:
+          type: string
+        email:
+          type: string
+          format: email
+        role:
+          type: string
+          enum: [user, admin]
+
+    # 创建请求
+    Create[Resource]Request:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          maxLength: 100
+        description:
+          type: string
+          maxLength: 500
+
+    # 更新请求
+    Update[Resource]Request:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 100
+        description:
+          type: string
+          maxLength: 500
+        status:
+          type: string
+          enum: [active, inactive]
+
+  responses:
+    BadRequest:
+      description: 请求参数错误
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: false
+              message:
+                type: string
+                example: "请求参数验证失败"
+              code:
+                type: integer
+                example: 400
+
+    Unauthorized:
+      description: 未授权访问
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: false
+              message:
+                type: string
+                example: "未授权，请先登录"
+              code:
+                type: integer
+                example: 401
+
+    ServerError:
+      description: 服务器内部错误
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: false
+              message:
+                type: string
+                example: "服务器内部错误"
+              code:
+                type: integer
+                example: 500

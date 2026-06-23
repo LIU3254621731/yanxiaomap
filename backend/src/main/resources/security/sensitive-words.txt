@@ -1,0 +1,94 @@
+# 敏感词过滤列表
+# 用于防止XSS攻击和恶意内容
+# 每行一个敏感词或正则表达式
+
+# XSS攻击关键词
+<script>
+javascript:
+onclick
+onload
+onerror
+onmouseover
+eval(
+alert(
+prompt(
+confirm(
+document.cookie
+window.location
+iframe
+frame
+object
+embed
+applet
+
+# SQL注入关键词
+select
+union
+or 
+and 
+exec
+execute
+xp_
+sp_
+drop 
+delete 
+update 
+insert 
+
+# 危险文件扩展名
+.exe
+.bat
+.cmd
+.sh
+.php
+.jsp
+.asp
+.aspx
+
+# 恶意URL协议
+file://
+ftp://
+gopher://
+data:
+
+# 危险HTML事件属性
+onabort
+onblur
+onchange
+ondblclick
+onfocus
+onkeydown
+onkeypress
+onkeyup
+onmousedown
+onmousemove
+onmouseout
+onmouseup
+onreset
+onresize
+onscroll
+onselect
+onsubmit
+onunload
+
+# 危险JavaScript函数
+setTimeout(
+setInterval(
+setImmediate(
+requestAnimationFrame(
+Function(
+eval(
+new Function
+document.write
+document.writeln
+innerHTML
+outerHTML
+
+# 特殊字符组合
+<<
+>>
+<>
+<![CDATA[
+&#x
+&#
+&#

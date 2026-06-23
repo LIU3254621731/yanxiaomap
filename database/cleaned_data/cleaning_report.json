@@ -1,0 +1,123 @@
+{
+  "generated_at": "2026-04-18T00:10:32.625890",
+  "execution_summary": {
+    "tables_processed": 6,
+    "tables_with_data": 6,
+    "total_records": 1054232,
+    "saved_files": 6
+  },
+  "table_details": {
+    "subject_categories": {
+      "status": "processed",
+      "record_count": 14,
+      "column_count": 6,
+      "sample_record": {
+        "code": "01",
+        "name": "哲学",
+        "created_at": "2026-04-18 00:09:21",
+        "updated_at": "2026-04-18 00:09:21",
+        "sort_order": 1,
+        "deleted_at": null
+      }
+    },
+    "disciplines": {
+      "status": "processed",
+      "record_count": 199,
+      "column_count": 7,
+      "sample_record": {
+        "code": "0101",
+        "name": "哲学",
+        "subject_category_id": 1,
+        "created_at": "2026-04-18 00:09:21",
+        "updated_at": "2026-04-18 00:09:21",
+        "sort_order": 1,
+        "deleted_at": null
+      }
+    },
+    "schools": {
+      "status": "processed",
+      "record_count": 872,
+      "column_count": 15,
+      "sample_record": {
+        "name": "海军军医大学",
+        "code": "91020",
+        "province": "",
+        "city": "",
+        "type": "",
+        "belong": "其他",
+        "website": "",
+        "level": "双非",
+        "logo": null,
+        "longitude": null,
+        "latitude": null,
+        "status": 1,
+        "created_at": "2026-04-18 00:09:21",
+        "updated_at": "2026-04-18 00:09:21",
+        "deleted_at": null
+      }
+    },
+    "majors": {
+      "status": "processed",
+      "record_count": 743,
+      "column_count": 11,
+      "sample_record": {
+        "code": "010101",
+        "name": "马克思主义哲学",
+        "discipline_id": 1.0,
+        "type": "学硕",
+        "full_time": 1,
+        "alias": null,
+        "remark": null,
+        "created_at": "2026-04-18 00:09:21",
+        "updated_at": "2026-04-18 00:09:21",
+        "sort_order": 1,
+        "deleted_at": null
+      }
+    },
+    "school_majors": {
+      "status": "processed",
+      "record_count": 743,
+      "column_count": 8,
+      "sample_record": {
+        "school_id": 1748,
+        "major_id": 1,
+        "status": 1,
+        "school_name": "北京大学",
+        "major_name": "马克思主义哲学",
+        "created_at": "2026-04-18 00:09:24",
+        "updated_at": "2026-04-18 00:09:24",
+        "deleted_at": null
+      }
+    },
+    "admission_data": {
+      "status": "processed",
+      "record_count": 1051661,
+      "column_count": 14,
+      "sample_record": {
+        "school_id": 1,
+        "major_id": 1,
+        "year": 2017.0,
+        "plan_enroll": 0,
+        "actual_enroll": 0,
+        "recommended_count": null,
+        "admission_ratio": null,
+        "retest_total_score": 295.0,
+        "single_subject_score": 50.0,
+        "average_admission_score": null,
+        "created_at": "2026-04-18 00:10:29",
+        "updated_at": "2026-04-18 00:10:29",
+        "data_source": "excel",
+        "deleted_at": null
+      }
+    }
+  },
+  "file_locations": {
+    "subject_categories": "c:\\Users\\32546\\Desktop\\yanxiaomap\\database\\cleaned_data\\subject_categories.csv",
+    "disciplines": "c:\\Users\\32546\\Desktop\\yanxiaomap\\database\\cleaned_data\\disciplines.csv",
+    "schools": "c:\\Users\\32546\\Desktop\\yanxiaomap\\database\\cleaned_data\\schools.csv",
+    "majors": "c:\\Users\\32546\\Desktop\\yanxiaomap\\database\\cleaned_data\\majors.csv",
+    "school_majors": "c:\\Users\\32546\\Desktop\\yanxiaomap\\database\\cleaned_data\\school_majors.csv",
+    "admission_data": "c:\\Users\\32546\\Desktop\\yanxiaomap\\database\\cleaned_data\\admission_data.csv"
+  },
+  "issues_and_warnings": []
+}

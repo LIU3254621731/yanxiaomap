@@ -1,0 +1,210 @@
+{
+  "project": {
+    "name": "[项目名称]",
+    "description": "[项目描述]",
+    "version": "1.0.0",
+    "created_at": "[创建日期]",
+    "target_users": "[目标用户描述]"
+  },
+  "tech_stack": {
+    "frontend": {
+      "framework": "[React | Vue | Angular]",
+      "language": "[TypeScript | JavaScript]",
+      "ui_library": "[Element Plus | Ant Design | Tailwind CSS]",
+      "build_tool": "[Vite | Webpack]",
+      "state_management": "[Pinia | Redux | Zustand | Context API]",
+      "http_client": "Axios"
+    },
+    "backend": {
+      "framework": "[Spring Boot | Express | FastAPI]",
+      "language": "[Java | Python | Node.js]",
+      "orm": "[MyBatis-Plus | Prisma | TypeORM | JPA]",
+      "database": "[PostgreSQL | MySQL | MongoDB]",
+      "cache": "[Redis]",
+      "auth": "[JWT | OAuth2]"
+    },
+    "deployment": {
+      "containerization": "Docker",
+      "orchestration": "[Docker Compose | Kubernetes]",
+      "ci_cd": "[GitHub Actions | GitLab CI]",
+      "cloud_platform": "[阿里云 | AWS | 自建]"
+    }
+  },
+  "functional_requirements": [
+    {
+      "module": "认证模块",
+      "features": [
+        {
+          "id": "F001",
+          "name": "用户登录",
+          "description": "用户通过用户名和密码登录系统",
+          "priority": "high",
+          "acceptance_criteria": [
+            "输入用户名和密码可以登录",
+            "登录成功后返回 JWT Token",
+            "登录失败有错误提示",
+            "支持记住密码功能"
+          ],
+          "dependencies": []
+        },
+        {
+          "id": "F002",
+          "name": "用户注册",
+          "description": "新用户注册账号",
+          "priority": "high",
+          "acceptance_criteria": [
+            "填写必要信息可注册",
+            "邮箱格式验证",
+            "密码强度校验",
+            "注册成功后自动登录"
+          ],
+          "dependencies": []
+        },
+        {
+          "id": "F003",
+          "name": "密码重置",
+          "description": "用户通过邮箱重置密码",
+          "priority": "medium",
+          "acceptance_criteria": [
+            "通过邮箱发送重置链接",
+            "重置链接有时效性"
+          ],
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "module": "核心业务模块",
+      "features": [
+        {
+          "id": "F004",
+          "name": "数据列表展示",
+          "description": "分页展示核心数据列表，支持筛选和排序",
+          "priority": "high",
+          "acceptance_criteria": [
+            "分页加载数据",
+            "支持关键词搜索",
+            "支持多条件筛选",
+            "支持排序",
+            "加载状态显示"
+          ],
+          "dependencies": ["T001"]
+        },
+        {
+          "id": "F005",
+          "name": "数据详情页",
+          "description": "展示单条数据的详细信息",
+          "priority": "high",
+          "acceptance_criteria": [
+            "完整展示数据信息",
+            "支持收藏/关注",
+            "有返回列表功能"
+          ],
+          "dependencies": ["T001"]
+        },
+        {
+          "id": "F006",
+          "name": "数据对比分析",
+          "description": "支持多条数据对比展示",
+          "priority": "medium",
+          "acceptance_criteria": [
+            "可选择多条数据对比",
+            "差异项高亮显示",
+            "对比结果可导出"
+          ],
+          "dependencies": ["F005"]
+        }
+      ]
+    },
+    {
+      "module": "管理后台",
+      "features": [
+        {
+          "id": "F007",
+          "name": "数据管理",
+          "description": "管理员对数据进行增删改查",
+          "priority": "high",
+          "acceptance_criteria": [
+            "管理员登录后可管理数据",
+            "支持批量导入/导出",
+            "操作有日志记录"
+          ],
+          "dependencies": ["F001", "T005"]
+        },
+        {
+          "id": "F008",
+          "name": "用户管理",
+          "description": "管理员管理用户账号",
+          "priority": "medium",
+          "acceptance_criteria": [
+            "查看用户列表",
+            "禁用/启用用户",
+            "角色权限管理"
+          ],
+          "dependencies": ["F001", "T005"]
+        }
+      ]
+    }
+  ],
+  "non_functional_requirements": {
+    "performance": {
+      "page_load_time": "< 2秒",
+      "api_response_time": "< 200ms",
+      "concurrent_users": 1000
+    },
+    "security": {
+      "authentication": "JWT Token 认证",
+      "password_encryption": "BCrypt",
+      "api_rate_limit": "每分钟 60 次",
+      "xss_protection": true,
+      "sql_injection_protection": true
+    },
+    "compatibility": {
+      "browsers": ["Chrome", "Firefox", "Safari", "Edge"],
+      "mobile": true,
+      "responsive": true
+    }
+  },
+  "data_models": [
+    {
+      "table_name": "users",
+      "description": "用户表",
+      "columns": [
+        { "name": "id", "type": "bigint", "primary_key": true, "auto_increment": true },
+        { "name": "username", "type": "varchar(50)", "unique": true, "nullable": false },
+        { "name": "password", "type": "varchar(255)", "nullable": false },
+        { "name": "email", "type": "varchar(100)", "unique": true },
+        { "name": "phone", "type": "varchar(20)" },
+        { "name": "role", "type": "varchar(20)", "default": "user" },
+        { "name": "status", "type": "varchar(10)", "default": "active" },
+        { "name": "created_at", "type": "datetime" },
+        { "name": "updated_at", "type": "datetime" },
+        { "name": "deleted_at", "type": "datetime", "nullable": true }
+      ]
+    },
+    {
+      "table_name": "items",
+      "description": "核心数据表",
+      "columns": [
+        { "name": "id", "type": "bigint", "primary_key": true, "auto_increment": true },
+        { "name": "name", "type": "varchar(200)", "nullable": false },
+        { "name": "description", "type": "text" },
+        { "name": "category", "type": "varchar(50)" },
+        { "name": "status", "type": "varchar(10)", "default": "active" },
+        { "name": "sort_order", "type": "int", "default": 0 },
+        { "name": "created_at", "type": "datetime" },
+        { "name": "updated_at", "type": "datetime" },
+        { "name": "deleted_at", "type": "datetime", "nullable": true }
+      ],
+      "indexes": [
+        { "name": "idx_category", "columns": ["category"] },
+        { "name": "idx_sort_order", "columns": ["sort_order"] }
+      ]
+    }
+  ],
+  "exclusion_scope": [
+    "国际化多语言支持",
+    "实时消息通知",
+    "第三方支付集成"
+  ]
+}

@@ -1,0 +1,41 @@
+﻿# Database data (keep schema only)
+database/cleaned_data/
+*.sql
+!database/schema.sql
+
+# Irrelevant project dirs
+root/
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+
+# Build outputs
+build/
+dist/
+*.class
+*.jar
+*.war
+
+# IDE
+.vs/
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Java
+target/
+!.mvn/wrapper/maven-wrapper.jar
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Env
+.env
+.env.local
+application-local.properties

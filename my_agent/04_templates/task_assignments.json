@@ -1,0 +1,215 @@
+{
+  "project": "[项目名称]",
+  "version": "1.0.0",
+  "created_at": "[创建日期]",
+  "updated_at": "[更新日期]",
+  "tasks": [
+    {
+      "task_id": "T001",
+      "name": "数据库设计与初始化",
+      "module": "数据层",
+      "agent": "database",
+      "priority": "high",
+      "status": "pending",
+      "dependencies": [],
+      "estimated_hours": 8,
+      "description": "根据需求文档设计数据库表结构，创建迁移脚本，准备初始数据",
+      "input": [
+        "需求文档中的实体关系描述",
+        "数据模型定义"
+      ],
+      "output": [
+        "SQL 建表脚本（schema.sql）",
+        "ORM 实体类定义（Java/Python/TypeScript）",
+        "初始数据脚本（data.sql）",
+        "数据字典文档（data_dictionary.md）"
+      ],
+      "acceptance_criteria": [
+        "表结构覆盖所有业务实体",
+        "迁移脚本创建/回滚可重复执行",
+        "初始数据满足基本功能演示需求",
+        "主键、索引、外键设计合理",
+        "字符集使用 UTF8MB4",
+        "支持软删除"
+      ],
+      "notes": ""
+    },
+    {
+      "task_id": "T002",
+      "name": "后端核心 API 开发",
+      "module": "服务层",
+      "agent": "backend",
+      "priority": "high",
+      "status": "pending",
+      "dependencies": ["T001"],
+      "estimated_hours": 24,
+      "description": "实现业务逻辑和 RESTful API 接口，包括 CRUD 操作、业务规则验证、缓存策略",
+      "input": [
+        "T001 输出的数据模型定义",
+        "API 接口规范文档"
+      ],
+      "output": [
+        "Controller 层代码（API 端点）",
+        "Service 层代码（业务逻辑）",
+        "Mapper/Repository 层代码（数据访问）",
+        "DTO/Request/Response 类型定义",
+        "API 文档（Swagger/OpenAPI）"
+      ],
+      "acceptance_criteria": [
+        "所有接口通过 HTTP 请求验证",
+        "统一响应格式 { success, message, data, code }",
+        "全局异常处理，错误信息不泄露敏感信息",
+        "输入参数验证和转义",
+        "接口性能满足 < 200ms 要求",
+        "接口文档可访问"
+      ],
+      "notes": "开发环境可使用 H2 内存数据库，降低启动门槛"
+    },
+    {
+      "task_id": "T003",
+      "name": "前端用户界面开发",
+      "module": "表现层",
+      "agent": "frontend",
+      "priority": "high",
+      "status": "pending",
+      "dependencies": [],
+      "estimated_hours": 24,
+      "description": "实现前端用户界面和交互逻辑，包括页面布局、组件开发、状态管理、API 集成",
+      "input": [
+        "UI 设计稿或功能需求描述",
+        "API 接口规范文档",
+        "T001 输出的数据模型定义"
+      ],
+      "output": [
+        "Vue/React 页面组件",
+        "状态管理 Store 定义",
+        "API 调用层封装",
+        "TypeScript 类型定义",
+        "全局样式和主题配置"
+      ],
+      "acceptance_criteria": [
+        "页面在主流浏览器正常显示",
+        "响应式布局适配移动端",
+        "Mock 数据可正常渲染展示",
+        "状态管理逻辑完整",
+        "代码通过 ESLint 检查",
+        "用户交互流畅，无卡顿"
+      ],
+      "notes": "后端 API 未就绪时使用 Mock 数据开发"
+    },
+    {
+      "task_id": "T004",
+      "name": "安全合规实现",
+      "module": "安全层",
+      "agent": "security",
+      "priority": "medium",
+      "status": "pending",
+      "dependencies": ["T002"],
+      "estimated_hours": 8,
+      "description": "实现认证授权、输入验证、接口限流、XSS/SQL 注入防护等安全措施",
+      "input": [
+        "T002 输出的后端代码",
+        "安全需求文档"
+      ],
+      "output": [
+        "安全配置类（SecurityConfig）",
+        "JWT 认证过滤器",
+        "接口限流过滤器",
+        "XSS 防护过滤器",
+        "安全测试报告"
+      ],
+      "acceptance_criteria": [
+        "JWT Token 认证正常，过期自动失效",
+        "密码使用 BCrypt 加密存储",
+        "接口权限控制生效（未授权返回 401）",
+        "OWASP Top 10 主要风险已防护",
+        "敏感接口限流生效",
+        "错误信息不泄露系统细节"
+      ],
+      "notes": "与后端 Agent 紧密协作，确保安全框架正确集成"
+    },
+    {
+      "task_id": "T005",
+      "name": "容器化与 CI/CD 配置",
+      "module": "部署层",
+      "agent": "deployment_test",
+      "priority": "medium",
+      "status": "pending",
+      "dependencies": [],
+      "estimated_hours": 4,
+      "description": "编写容器化配置（Dockerfile, docker-compose），配置 CI/CD 流水线",
+      "input": [
+        "项目技术栈信息",
+        "部署环境要求"
+      ],
+      "output": [
+        "前端 Dockerfile",
+        "后端 Dockerfile",
+        "docker-compose.yml",
+        "Nginx 配置（反向代理）",
+        "CI/CD 配置文件"
+      ],
+      "acceptance_criteria": [
+        "Docker Compose 一键启动所有服务",
+        "容器化配置正确可构建",
+        "Nginx 反向代理配置正确",
+        "环境变量集中管理"
+      ],
+      "notes": ""
+    },
+    {
+      "task_id": "T006",
+      "name": "集成测试与部署验证",
+      "module": "测试层",
+      "agent": "deployment_test",
+      "priority": "medium",
+      "status": "pending",
+      "dependencies": ["T002", "T003", "T004"],
+      "estimated_hours": 8,
+      "description": "编写集成测试用例，执行端到端测试，验证部署配置",
+      "input": [
+        "完整项目代码",
+        "部署配置"
+      ],
+      "output": [
+        "集成测试代码",
+        "测试报告",
+        "部署文档"
+      ],
+      "acceptance_criteria": [
+        "核心业务流程 E2E 测试通过",
+        "前后端联调测试通过",
+        "Docker Compose 部署验证成功",
+        "部署文档完整可操作"
+      ],
+      "notes": "需要所有模块代码就绪"
+    },
+    {
+      "task_id": "T007",
+      "name": "项目集成与协调",
+      "module": "项目管理",
+      "agent": "integration",
+      "priority": "high",
+      "status": "pending",
+      "dependencies": [],
+      "estimated_hours": 0,
+      "description": "持续监控项目进度，协调各 Agent 协作，解决接口冲突，维护项目状态看板",
+      "input": [
+        "所有 Agent 的进度报告",
+        "任务分配表"
+      ],
+      "output": [
+        "项目状态看板",
+        "集成计划",
+        "问题跟踪清单"
+      ],
+      "acceptance_criteria": [
+        "接口一致性达到 100%",
+        "依赖冲突及时解决",
+        "项目状态透明可视",
+        "问题及时跟踪处理"
+      ],
+      "notes": "持续进行，贯穿整个项目周期"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "generated_at": "2026-04-18T00:10:32.137298",
+  "tables": {
+    "subject_categories": {
+      "record_count": 14,
+      "column_count": 6,
+      "completeness": 0.8333333333333334,
+      "consistency": 1.0,
+      "accuracy": 1.0,
+      "duplicate_rows": 

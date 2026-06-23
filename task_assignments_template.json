@@ -1,0 +1,192 @@
+{
+  "project_id": "project_001",
+  "project_name": "项目名称",
+  "created_at": "2026-04-17",
+  "tasks": [
+    {
+      "task_id": "T001",
+      "title": "前端用户认证界面",
+      "description": "开发登录和注册页面，包括表单验证和错误处理",
+      "agent_type": "frontend",
+      "priority": "high",
+      "estimated_effort": "2 days",
+      "dependencies": [],
+      "deliverables": [
+        "src/components/auth/LoginForm.tsx",
+        "src/components/auth/RegisterForm.tsx",
+        "src/contexts/AuthContext.tsx",
+        "src/styles/auth.css"
+      ],
+      "acceptance_criteria": [
+        "表单验证正确显示错误信息",
+        "成功登录后跳转到仪表盘",
+        "移动端响应式设计",
+        "支持键盘导航"
+      ],
+      "technical_requirements": {
+        "framework": "React 18",
+        "language": "TypeScript",
+        "styling": "Tailwind CSS",
+        "state_management": "Context API"
+      }
+    },
+    {
+      "task_id": "T002",
+      "title": "后端用户认证API",
+      "description": "实现用户注册、登录、注销的API端点",
+      "agent_type": "backend",
+      "priority": "high",
+      "estimated_effort": "3 days",
+      "dependencies": ["T003"],
+      "deliverables": [
+        "src/routes/auth.ts",
+        "src/controllers/authController.ts",
+        "src/middlewares/authMiddleware.ts",
+        "src/utils/jwt.ts"
+      ],
+      "acceptance_criteria": [
+        "密码使用bcrypt加密存储",
+        "JWT token生成和验证",
+        "输入验证和错误处理",
+        "日志记录所有认证事件"
+      ],
+      "technical_requirements": {
+        "framework": "Express.js",
+        "language": "TypeScript",
+        "authentication": "JWT",
+        "validation": "Joi或Zod"
+      }
+    },
+    {
+      "task_id": "T003",
+      "title": "用户数据表设计",
+      "description": "设计users表结构，包含必要字段和索引",
+      "agent_type": "database",
+      "priority": "high",
+      "estimated_effort": "1 day",
+      "dependencies": [],
+      "deliverables": [
+        "migrations/001_create_users_table.sql",
+        "models/User.ts",
+        "seeders/001_seed_admin_user.sql"
+      ],
+      "acceptance_criteria": [
+        "包含email、password_hash、created_at等字段",
+        "email字段唯一索引",
+        "支持软删除",
+        "符合数据库设计范式"
+      ],
+      "technical_requirements": {
+        "database": "PostgreSQL 15",
+        "orm": "TypeORM",
+        "migration_tool": "TypeORM migrations"
+      }
+    },
+    {
+      "task_id": "T004",
+      "title": "前端数据管理界面",
+      "description": "开发数据表格和表单，支持增删改查操作",
+      "agent_type": "frontend",
+      "priority": "medium",
+      "estimated_effort": "3 days",
+      "dependencies": ["T001", "T002"],
+      "deliverables": [
+        "src/components/data/DataTable.tsx",
+        "src/components/data/DataForm.tsx",
+        "src/components/data/SearchBar.tsx",
+        "src/hooks/useDataApi.ts"
+      ],
+      "acceptance_criteria": [
+        "支持分页和搜索功能",
+        "表单验证和错误提示",
+        "批量操作支持",
+        "良好的加载状态和空状态"
+      ]
+    },
+    {
+      "task_id": "T005",
+      "title": "后端数据管理API",
+      "description": "实现数据的CRUD API端点",
+      "agent_type": "backend",
+      "priority": "medium",
+      "estimated_effort": "3 days",
+      "dependencies": ["T002", "T003"],
+      "deliverables": [
+        "src/routes/data.ts",
+        "src/controllers/dataController.ts",
+        "src/services/dataService.ts"
+      ],
+      "acceptance_criteria": [
+        "完整的CRUD操作",
+        "输入验证和过滤",
+        "权限检查（仅登录用户可访问）",
+        "审计日志记录"
+      ]
+    },
+    {
+      "task_id": "T006",
+      "title": "单元测试编写",
+      "description": "为前后端核心功能编写单元测试",
+      "agent_type": "test",
+      "priority": "medium",
+      "estimated_effort": "2 days",
+      "dependencies": ["T001", "T002", "T004", "T005"],
+      "deliverables": [
+        "src/components/auth/__tests__/LoginForm.test.tsx",
+        "src/controllers/__tests__/authController.test.ts",
+        "src/__tests__/integration/auth.test.ts"
+      ],
+      "acceptance_criteria": [
+        "测试覆盖率 > 80%",
+        "所有核心功能都有测试用例",
+        "测试通过率 100%"
+      ]
+    },
+    {
+      "task_id": "T007",
+      "title": "Docker化部署配置",
+      "description": "配置Docker容器和docker-compose部署",
+      "agent_type": "deployment",
+      "priority": "low",
+      "estimated_effort": "2 days",
+      "dependencies": ["T001", "T002", "T003", "T004", "T005"],
+      "deliverables": [
+        "Dockerfile.frontend",
+        "Dockerfile.backend",
+        "docker-compose.yml",
+        "nginx.conf"
+      ],
+      "acceptance_criteria": [
+        "容器可以成功构建",
+        "多服务可以通过docker-compose启动",
+        "Nginx反向代理配置正确"
+      ]
+    }
+  ],
+  "timeline": {
+    "start_date": "2026-04-17",
+    "estimated_end_date": "2026-04-30",
+    "milestones": [
+      {
+        "date": "2026-04-20",
+        "description": "完成用户认证模块",
+        "dependent_tasks": ["T001", "T002", "T003"]
+      },
+      {
+        "date": "2026-04-25",
+        "description": "完成数据管理模块",
+        "dependent_tasks": ["T004", "T005"]
+      },
+      {
+        "date": "2026-04-28",
+        "description": "完成测试和部署配置",
+        "dependent_tasks": ["T006", "T007"]
+      }
+    ]
+  },
+  "communication_channels": {
+    "frontend_backend": "通过API接口定义JSON文件",
+    "backend_database": "通过数据模型定义文件",
+    "integration": "通过集成协调器消息队列"
+  }
+}
